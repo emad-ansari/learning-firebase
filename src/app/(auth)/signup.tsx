@@ -15,8 +15,7 @@ export default function SignupScreen() {
   const [password, setPassword] = useState<string>("");
 
   console.log("username", username);
-  console.log("email", email);
-  console.log("password", password);
+  
 
   return (
     <SafeAreaView className="flex-1 bg-white">
