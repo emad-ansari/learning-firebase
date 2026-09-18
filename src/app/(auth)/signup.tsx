@@ -1,10 +1,12 @@
+import { useAuth } from "@/store/authStore";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
+  ActivityIndicator,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -14,8 +16,11 @@ export default function SignupScreen() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  console.log("username", username);
-  
+  const { register, loading, error } = useAuth();
+
+  const handleUserRegisteration = () => {
+    register(username, email, password);
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -33,7 +38,7 @@ export default function SignupScreen() {
             placeholder="John Doe"
             className="border border-gray-300 p-4 rounded-2xl "
             placeholderTextColor="#9ca3af"
-            value = {username}
+            value={username}
             onChangeText={(text) => setUsername(text)}
           />
         </View>
@@ -43,7 +48,7 @@ export default function SignupScreen() {
             placeholder="jhon@example.com"
             className="border border-gray-300 p-4 rounded-2xl "
             placeholderTextColor="#9ca3af"
-            value = {email}
+            value={email}
             onChangeText={(text) => setEmail(text)}
           />
         </View>
@@ -54,7 +59,7 @@ export default function SignupScreen() {
             secureTextEntry
             className="border border-gray-300 p-4 rounded-2xl "
             placeholderTextColor="#9ca3af"
-            value = {password}
+            value={password}
             onChangeText={(text) => setPassword(text)}
           />
         </View>
@@ -62,8 +67,12 @@ export default function SignupScreen() {
         <TouchableOpacity
           className="bg-blue-500 hover:bg-blue-500 p-4 rounded-2xl items-center justify-center mb-4"
           activeOpacity={0.9}
+          onPress={handleUserRegisteration}
         >
-          <Text className="text-md font-medium text-white">Create Account</Text>
+          {loading && <ActivityIndicator size={"small"} color="#fff" />}
+          <Text className="text-lg font-medium text-white">
+            {loading ? "creating..." : "Create Account"}
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity

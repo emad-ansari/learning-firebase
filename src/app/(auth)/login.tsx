@@ -1,6 +1,13 @@
+import { useAuth } from "@/store/authStore";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function LoginScreen() {
@@ -9,12 +16,20 @@ export default function LoginScreen() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
+  const { login, loading, error } = useAuth();
+
+  const handleUserLogin = () => {
+    login(email, password);
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       {/* Header */}
       <View className="items-center justify-center mt-20">
         <Text className="text-2xl font-bold text-blue-500 mb-1">Taskly</Text>
-        <Text className="text-gray-500">Welcome back! Login to your account</Text>
+        <Text className="text-gray-500">
+          Welcome back! Login to your account
+        </Text>
       </View>
 
       {/* form */}
@@ -44,8 +59,10 @@ export default function LoginScreen() {
         <TouchableOpacity
           className="bg-blue-500 hover:bg-blue-500 p-4 rounded-2xl items-center justify-center mb-4"
           activeOpacity={0.9}
+          onPress={handleUserLogin}
         >
-          <Text className="text-md font-medium text-white">Login</Text>
+          {loading && <ActivityIndicator size={"small"} color="#fff" />}
+          <Text className = "text-lg font-medium text-white">{loading ? "logging..." : "Login"}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
