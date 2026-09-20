@@ -2,6 +2,8 @@ import { BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
 import { useMemo, useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { RenderBackdrop } from "./BottomSheetRenderBackdrop";
+import { useTask } from "@/store/taskStore";
+import { useAuth } from "@/store/authStore";
 
 interface Props {
   bottomSheetModalRef: React.RefObject<BottomSheetModal | null>;
@@ -10,11 +12,16 @@ interface Props {
 export const CreateTaskBottomSheet = ({ bottomSheetModalRef }: Props) => {
   const snapPoints = useMemo(() => ["55%"], []);
 
+  const {addTask} = useTask();
+  const {user} = useAuth();
+  
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
-  const handleSubmit = () => {
+  const handleCreateTask = async() => {
     if (!title.trim()) return;
+    await addTask(user!.uid, title, description)
 
     setTitle("");
     setDescription("");
@@ -49,7 +56,7 @@ export const CreateTaskBottomSheet = ({ bottomSheetModalRef }: Props) => {
           />
 
           <TouchableOpacity
-            onPress={handleSubmit}
+            onPress={handleCreateTask}
             className="rounded-xl bg-blue-500 px-4 py-3 "
             activeOpacity={0.9}
 

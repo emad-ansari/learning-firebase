@@ -16,7 +16,7 @@ interface AuthState {
     password: string,
   ) => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
-  logout: () => Promise<void>
+  logout: () => Promise<void>;
 }
 
 export const useAuth = create<AuthState>((set) => ({
@@ -37,17 +37,15 @@ export const useAuth = create<AuthState>((set) => ({
 
     try {
       const userCredential = await registerUser(email, password);
-      console.log("signup user credentials: ", JSON.stringify(userCredential));
       if (userCredential.user) {
         // save the user in database/firestore
         const user = userCredential.user;
+        console.log("user: ", user);
         await createUser(user.uid, username, email);
+        console.log("user saved successfully");
       }
     } catch (error: any) {
-      console.error(
-        "User Regsiteration failed!: ",
-        JSON.stringify(error, null, 2),
-      );
+      console.error("User Registration failed!", error);
       set({ error });
     } finally {
       set({ loading: false });

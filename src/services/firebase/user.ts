@@ -9,7 +9,7 @@ export const createUser = async (
   await setDoc(doc(db, "users", uid), {
     username,
     email,
-    createdAt: serverTimestamp,
+    createdAt: serverTimestamp(),
   });
 };
 

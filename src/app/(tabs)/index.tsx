@@ -1,10 +1,9 @@
 import userAvatar from "@/assets/images/avatar.png";
-import { data, filterBadges } from "@/utils/data";
-import { useRef, useState } from "react";
-
 import { CreateTaskBottomSheet } from "@/components/CreateTaskBottomSheet";
 import { CreateTaskButton } from "@/components/CreateTaskButton";
 import { TaskCard } from "@/components/TaskCard";
+import { useTask } from "@/store/taskStore";
+import { data, filterBadges } from "@/utils/data";
 import { FilterBadgeType } from "@/utils/types";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import {
@@ -12,19 +11,21 @@ import {
   MultiplicationSignIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react-native";
+import { useRef, useState } from "react";
 import {
   Image,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
   const [searchText, setSearchText] = useState("");
   const [selectedBadge, setSelectedBadge] = useState<FilterBadgeType>("All");
+  const { addTask } = useTask();
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 

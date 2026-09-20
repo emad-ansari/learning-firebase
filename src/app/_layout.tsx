@@ -1,16 +1,15 @@
 import { subscribeToAuthChanges } from "@/services/firebase/authListener";
 import { useAuth } from "@/store/authStore";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { Stack, useRouter } from "expo-router";
+import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
+import { ActivityIndicator, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import "../../global.css";
 
 export default function RootLayout() {
-  const router = useRouter();
-
   const { loading, user } = useAuth();
 
   useEffect(() => {
@@ -20,7 +19,11 @@ export default function RootLayout() {
   }, []);
 
   if (loading) {
-    return null;
+    return (
+      <View className="flex-1 items-center justify-center">
+        <ActivityIndicator size="large" color="#2b7fff" />
+      </View>
+    );
   }
 
   return (
@@ -29,11 +32,11 @@ export default function RootLayout() {
       <GestureHandlerRootView>
         <BottomSheetModalProvider>
           <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Protected guard = {!!user}>
+            <Stack.Protected guard={!!user}>
               <Stack.Screen name="(tabs)" />
             </Stack.Protected>
 
-            <Stack.Protected guard = {!user}>
+            <Stack.Protected guard={!user}>
               <Stack.Screen name="(auth)" />
             </Stack.Protected>
           </Stack>
